@@ -122,8 +122,5 @@ public class InsertMood extends JFrame implements ActionListener {
         
     }
 
-    // Main method
-    public static void main(String[] args) {
-        new InsertMood();
-    }
+    
 }
