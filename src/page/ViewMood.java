@@ -1,8 +1,5 @@
 package page;
 
-import java.awt.CardLayout;
-import java.awt.GridLayout;
-
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 
@@ -25,20 +22,20 @@ public class ViewMood extends JFrame {
 
         greetings = new JLabel("Hello, " + currentUser.getUsername());
 
-        String[] columns = {"Mood", "Intensity", "Date", "Description"};
-        Object[][] data = new Object[currentUser.moodDataList.size()][4];
-
-        for (int i = 0; i < currentUser.moodDataList.size(); i++) {
-            data[i][0] = currentUser.moodDataList.get(i).getMood();
-            data[i][1] = currentUser.moodDataList.get(i).getIntensity();
-            data[i][2] = currentUser.moodDataList.get(i).getDate();
-            data[i][3] = currentUser.moodDataList.get(i).getDescription();
-        }
-
-        DefaultTableModel tableModel = new DefaultTableModel(data, columns);
+        DefaultTableModel tableModel = new DefaultTableModel(new Object[0][4], new String[]{"Mood", "Intensity", "Date", "Description"});
 
         JTable table = new JTable(tableModel);
         JScrollPane scrollPane = new JScrollPane(table);
+        
+        try {
+            currentUser.getMoodDataList().forEach(moodData -> {
+                tableModel.addRow(new Object[]{moodData.getMood(), moodData.getIntensity(), moodData.getDate(), moodData.getDescription()});
+            });
+        } catch (NullPointerException e) {
+            JOptionPane.showMessageDialog(this, "No mood data found for user", "Error", JOptionPane.ERROR_MESSAGE);
+            dispose();
+            return;
+        }
 
         add(greetings);
         add(scrollPane);
