@@ -11,7 +11,6 @@ import main.NavigationBar;
 
 public class InsertMood extends JFrame implements ActionListener {
 
-    // Declare the components
     JLabel moodLabel, intensityLabel, dateLabel, descriptionLabel;
     JComboBox<String> moodComboBox;
     JSlider intensitySlider;
@@ -19,9 +18,7 @@ public class InsertMood extends JFrame implements ActionListener {
     JTextArea descriptionTextArea;
     JButton submitButton;
 
-    // Constructor
     public InsertMood() {
-        // Set the frame properties
         setTitle("Mood Tracker - Insert Mood");
         setSize(500, 400);
         setDefaultCloseOperation(EXIT_ON_CLOSE);
@@ -30,8 +27,15 @@ public class InsertMood extends JFrame implements ActionListener {
 
         NavigationBar navigationBar = new NavigationBar();
         setJMenuBar(navigationBar);
-        
-        // Create the components
+
+        initializeComponents();
+        addComponentsToLayout();
+        attachListeners();
+
+        setVisible(true);
+    }
+    
+    private void initializeComponents() {
         moodLabel = new JLabel("Mood:");
         intensityLabel = new JLabel("Intensity:");
         dateLabel = new JLabel("Date:");
@@ -41,12 +45,12 @@ public class InsertMood extends JFrame implements ActionListener {
         dateCalendar = new JCalendar();
         descriptionTextArea = new JTextArea();
         submitButton = new JButton("Submit");
-
-        // Set the layout
+    }
+    
+    private void addComponentsToLayout() {
         setLayout(new GridBagLayout());
         GridBagConstraints c = new GridBagConstraints();
 
-        // Add the components to the frame
         c.gridx = 0;
         c.gridy = 0;
         c.anchor = GridBagConstraints.LINE_END;
@@ -59,7 +63,6 @@ public class InsertMood extends JFrame implements ActionListener {
 
         c.gridx = 0;
         c.gridy = 1;
-        c.anchor = GridBagConstraints.LINE_END;
         add(intensityLabel, c);
 
         c.gridx = 1;
@@ -68,16 +71,13 @@ public class InsertMood extends JFrame implements ActionListener {
 
         c.gridx = 0;
         c.gridy = 2;
-        c.anchor = GridBagConstraints.LINE_END;
         add(dateLabel, c);
-
         c.gridx = 1;
         c.anchor = GridBagConstraints.LINE_START;
         add(dateCalendar, c);
 
         c.gridx = 0;
         c.gridy = 3;
-        c.anchor = GridBagConstraints.LINE_END;
         add(descriptionLabel, c);
 
         c.gridx = 1;
@@ -94,29 +94,21 @@ public class InsertMood extends JFrame implements ActionListener {
         c.weightx = 0;
         c.weighty = 0;
         add(submitButton, c);
-
-        // Add the action listeners
+    }
+    
+    private void attachListeners() {
         submitButton.addActionListener(this);
-
-        
-        
-        // Show the frame
-        setVisible(true);
     }
 
-    // ActionListener implementation
     public void actionPerformed(ActionEvent ae) {
-        // Get the selected values
         String mood = (String) moodComboBox.getSelectedItem();
         int intensity = intensitySlider.getValue();
         Date date = dateCalendar.getDate();
         String description = descriptionTextArea.getText();
 
-        // Do something with the selected values (e.g. save to database)
         if(User.getCurrentUser() != null) {
         	User u = User.getCurrentUser();
         	u.insertMood(new Mood(mood, intensity, date, description));
-        	// Show a message to the user
             JOptionPane.showMessageDialog(this, "Mood saved successfully!");
         }
         
