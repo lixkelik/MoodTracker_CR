@@ -10,8 +10,7 @@ import java.util.ArrayList;
 
 
 public class Main {
-	// Declare the user data ArrayList
-    public static ArrayList<User> userDataList = userDataList = new ArrayList<>();;
+    public static ArrayList<User> userDataList = new ArrayList<>();;
     public Main() {
     	
         

@@ -7,49 +7,60 @@ import page.InsertMood;
 import page.Login;
 import page.ViewMood;
 
-import java.awt.event.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
 public class NavigationBar extends JMenuBar {
     public NavigationBar() {
-        // Create the "File" menu
+        createFileMenu();
+    }
+
+    private void createFileMenu() {
         JMenu fileMenu = new JMenu("Navigation");
-
-        // Create the "Login" menu item
-        JMenuItem loginMenuItem = new JMenuItem("Logout");
-        loginMenuItem.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-            	User.setCurrentUser(null);
-            	SwingUtilities.getWindowAncestor(getRootPane()).dispose();
-                Login login = new Login();
-                login.setVisible(true);
-            }
-        });
-        fileMenu.add(loginMenuItem);
-
-        // Create the "View Mood" menu item
-        JMenuItem viewMoodMenuItem = new JMenuItem("View Mood");
-        viewMoodMenuItem.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-            	SwingUtilities.getWindowAncestor(getRootPane()).dispose();
-                ViewMood viewMood = new ViewMood();
-                viewMood.setVisible(true);
-            }
-        });
-        fileMenu.add(viewMoodMenuItem);
-
-        // Create the "Insert Mood" menu item
-        JMenuItem insertMoodMenuItem = new JMenuItem("Insert Mood");
-        insertMoodMenuItem.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-            	SwingUtilities.getWindowAncestor(getRootPane()).dispose();
-                InsertMood insertMood = new InsertMood();
-                insertMood.setVisible(true);
-            }
-        });
-        fileMenu.add(insertMoodMenuItem);
-
-        // Add the "File" menu to the menu bar
+        fileMenu.add(createMenuItem("Logout", this::logout));
+        fileMenu.add(createMenuItem("View Mood", this::navigateToViewMood));
+        fileMenu.add(createMenuItem("Insert Mood", this::navigateToInsertMood));
         add(fileMenu);
     }
-}
 
+    private JMenuItem createMenuItem(String label, ActionListener actionListener) {
+        JMenuItem menuItem = new JMenuItem(label);
+        menuItem.addActionListener(actionListener);
+        return menuItem;
+    }
+
+    private void logout(ActionEvent e) {
+        User.setCurrentUser(null);
+        closeCurrentWindow();
+        openLoginWindow();
+    }
+
+    private void navigateToViewMood(ActionEvent e) {
+        closeCurrentWindow();
+        openViewMoodWindow();
+    }
+
+    private void navigateToInsertMood(ActionEvent e) {
+        closeCurrentWindow();
+        openInsertMoodWindow();
+    }
+
+    private void closeCurrentWindow() {
+        SwingUtilities.getWindowAncestor(getRootPane()).dispose();
+    }
+
+    private void openLoginWindow() {
+        Login login = new Login();
+        login.setVisible(true);
+    }
+
+    private void openViewMoodWindow() {
+        ViewMood viewMood = new ViewMood();
+        viewMood.setVisible(true);
+    }
+
+    private void openInsertMoodWindow() {
+        InsertMood insertMood = new InsertMood();
+        insertMood.setVisible(true);
+    }
+}
